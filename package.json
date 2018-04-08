@@ -1,6 +1,6 @@
 {
-  "name": "parse-server-example",
-  "version": "1.4.0",
+  "name": "parse-server-graphql-example",
+  "version": "1.5.0",
   "description": "An example Parse API server using the parse-server module",
   "main": "index.js",
   "repository": {
@@ -9,13 +9,14 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@types/graphql": "^0.13.0",
     "express": "~4.16.x",
-    "graphql": "^0.12.3",
-    "graphql-tools": "^2.19.0",
-    "parse": "^1.11.0",
-    "parse-graphql-server": "^0.3.0",
+    "express-graphql": "^0.6.12",
+    "graphql": "^0.13.2",
+    "graphql-tools": "^2.23.1",
+    "parse": "1.11.0",
     "parse-server": "*",
-    "ts-node": "^4.1.0"
+    "ts-node": "^5.0.1"
   },
   "scripts": {
     "start": "ts-node index.ts",
@@ -27,7 +28,7 @@
   "devDependencies": {
     "@types/express": "^4.11.1",
     "@types/parse": "^2.4.3",
-    "nodemon": "^1.14.12",
+    "nodemon": "^1.17.3",
     "typings": "^2.1.1"
   }
 }
