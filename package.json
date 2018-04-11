@@ -13,7 +13,7 @@
     "express": "~4.16.x",
     "express-graphql": "^0.6.12",
     "graphql": "^0.13.2",
-    "graphql-tools": "^2.23.1",
+    "graphql-tools": "^2.24.0",
     "graphql-voyager": "^1.0.0-rc.15",
     "parse": "1.11.0",
     "parse-server": "*",
