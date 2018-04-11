@@ -1,8 +1,9 @@
 import { Application } from 'express'
 import schema from './src/graphql'
 import * as GraphQLHTTP from 'express-graphql'
-import * as Parse from 'parse'
+import * as Parse from 'parse/node'
 import express = require( 'express' )
+import { express as middleware } from 'graphql-voyager/middleware'
 
 const ParseServer = require('parse-server').ParseServer
 const path = require('path')
@@ -11,6 +12,7 @@ const CLOUD_CODE_MAIN = process.env.CLOUD_CODE_MAIN || __dirname + '/src/cloud'
 const APP_ID = process.env.APP_ID || 'myAppId'
 const port = process.env.PORT || 1337
 const SERVER_URL = process.env.SERVER_URL || `http://localhost:${port}/parse`  // Don't forget to change to https if needed
+const LIVEQUERY_CLASSNAMES = [ ]
 let DATABASE_URI = process.env.DATABASE_URI || process.env.MONGODB_URI
 
 if (!DATABASE_URI) {
@@ -25,10 +27,7 @@ const api = new ParseServer({
     masterKey: MASTER_KEY,
     serverURL: SERVER_URL,
     liveQuery: {
-        classNames: [
-            'Posts',
-            'Comments',
-        ], // List of classes to support for query subscriptions
+        classNames: LIVEQUERY_CLASSNAMES, // List of classes to support for query subscriptions
     },
 })
 // Client-keys like the javascript key or the .NET key are not necessary with parse-server
@@ -57,19 +56,19 @@ app.get('/test', (req, res) => res.sendFile(path.join(__dirname, '/public/test.h
 Parse.initialize(process.env.APP_ID || 'myAppId')
 Parse.serverURL = process.env.SERVER_URL || 'http://localhost:1337/parse'
 Parse.masterKey = process.env.MASTER_KEY
+Parse.Cloud.useMasterKey()
 
 //GraphQL
-app.use('/graphql', GraphQLHTTP((request) => {
-        return {
-            graphiql: true,
-            pretty: true,
-            schema: schema,
-            context: {
-                sessionToken: 'r:662feeb261908e475d62233d2080269e' || request.headers[ 'x-parse-session-token' ],
-            },
-        }
-    }),
-)
+app.use('/graphql', GraphQLHTTP((request) => ({
+    graphiql: true,
+    pretty: true,
+    schema,
+    context: {
+        sessionToken: request.headers[ 'x-parse-session-token' ],
+    },
+})))
+
+app.use('/graph', middleware({ endpointUrl: '/graphql' }));
 
 
 const httpServer = require('http').createServer(app)
