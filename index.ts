@@ -53,9 +53,9 @@ app.get('/', (req, res) => res
 app.get('/test', (req, res) => res.sendFile(path.join(__dirname, '/public/test.html')))
 
 //Initialize Parse
-Parse.initialize(process.env.APP_ID || 'myAppId')
-Parse.serverURL = process.env.SERVER_URL || 'http://localhost:1337/parse'
-Parse.masterKey = process.env.MASTER_KEY
+Parse.initialize(APP_ID)
+Parse.serverURL = SERVER_URL
+Parse.masterKey = MASTER_KEY
 Parse.Cloud.useMasterKey()
 
 //GraphQL
@@ -72,7 +72,12 @@ app.use('/graph', middleware({ endpointUrl: '/graphql' }));
 
 
 const httpServer = require('http').createServer(app)
-httpServer.listen(port, () => console.log(`parse-server-example running on ${SERVER_URL}`))
+httpServer.listen(port, () => {
+    console.log(`StaticServer running on ${SERVER_URL.replace('/parse','/')}`)
+    console.log(`Parse Server running on ${SERVER_URL}`)
+    console.log(`Graphql running on ${SERVER_URL.replace('/parse','/graphql')}`)
+    console.log(`Graphql Visual running on ${SERVER_URL.replace('/parse','/graph')}`)
+})
 
 // This will enable the Live Query real-time server
 ParseServer.createLiveQueryServer(httpServer)

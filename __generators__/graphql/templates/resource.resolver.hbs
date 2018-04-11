@@ -23,20 +23,20 @@ export const {{ properCase name }}Resolver = {
         async {{ properCase name }}Create(_, { input }, { sessionToken }) {
             const session = await isAuthorized(sessionToken)
             const {{ properCase name }}Resolver = new ParseObject()
-            input.keys().map(key => {{ properCase name }}Resolver.set(key, input[ key ]))
+            Object.keys(input).map(key => {{ properCase name }}Resolver.set(key, input[ key ]))
             {{ properCase name }}Resolver.setACL(new Parse.ACL(session))
             return {{ properCase name }}Resolver.save()
         },
         async {{ properCase name }}Update(_, { input }, { sessionToken }) {
             const session = await isAuthorized(sessionToken)
             const {{ properCase name }}Resolver = new ParseObject()
-            input.keys().map(key => {{ properCase name }}Resolver.set(key, input[ key ]))
+            Object.keys(input).map(key => {{ properCase name }}Resolver.set(key, input[ key ]))
             {{ properCase name }}Resolver.setACL(new Parse.ACL(session))
             return {{ properCase name }}Resolver.save()
         },
-        async {{ properCase name }}Delete(_, { id }, { sessionToken, Query }) {
+        async {{ properCase name }}Delete(_, { id }, { sessionToken }) {
             const session = await isAuthorized(sessionToken)
-            const todo = await new Query(ParseObject).get(id)
+            const todo = await new Parse.Query(ParseObject).get(id)
             return todo.destroy()
         },
     },

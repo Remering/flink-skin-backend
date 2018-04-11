@@ -71,7 +71,7 @@ export const UserResolver = {
             return Parse.User.logIn(username, password)
         },
 
-        async UserDelete(_, { id }, { sessionToken, Query }) {
+        async UserDelete(_, { id }, { sessionToken }) {
             const session = await isAuthorized(sessionToken)
             return session.destroy()
         },
