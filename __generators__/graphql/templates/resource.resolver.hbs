@@ -1,0 +1,43 @@
+import * as Parse from 'parse/node'
+import { isAuthorized } from '../User/User.resolver'
+
+const ParseObject = Parse.Object.extend('{{ properCase name }}')
+
+export const {{ properCase name }}Resolver = {
+    {{ properCase name }}: {
+        id: (root) => root.id,
+        title: (root) => root.get('title'),
+        createdAt: (root) => root.get('createdAt').getTime(),
+        updatedAt: (root) => root.get('updatedAt').getTime(),
+    },
+    Query: {
+        async {{ properCase name }}(_, { id }) {
+            return new Parse.Query(ParseObject).get(id)
+        },
+
+        async {{ properCase name }}s(_, {} ) {
+            return new Parse.Query(ParseObject).find()
+        },
+    },
+    Mutation: {
+        async {{ properCase name }}Create(_, { input }, { sessionToken }) {
+            const session = await isAuthorized(sessionToken)
+            const {{ properCase name }}Resolver = new ParseObject()
+            input.keys().map(key => {{ properCase name }}Resolver.set(key, input[ key ]))
+            {{ properCase name }}Resolver.setACL(new Parse.ACL(session))
+            return {{ properCase name }}Resolver.save()
+        },
+        async {{ properCase name }}Update(_, { input }, { sessionToken }) {
+            const session = await isAuthorized(sessionToken)
+            const {{ properCase name }}Resolver = new ParseObject()
+            input.keys().map(key => {{ properCase name }}Resolver.set(key, input[ key ]))
+            {{ properCase name }}Resolver.setACL(new Parse.ACL(session))
+            return {{ properCase name }}Resolver.save()
+        },
+        async {{ properCase name }}Delete(_, { id }, { sessionToken, Query }) {
+            const session = await isAuthorized(sessionToken)
+            const todo = await new Query(ParseObject).get(id)
+            return todo.destroy()
+        },
+    },
+}

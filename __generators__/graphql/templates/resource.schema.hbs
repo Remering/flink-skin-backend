@@ -1,0 +1,26 @@
+export const {{ properCase name }}Type= `
+    type {{ properCase name }} {
+        id: ID!
+        title: String!
+        createdAt: Float!
+        updatedAt: Float!
+    }
+    
+    input {{ properCase name }}Input {
+        title: String!
+        image: String!
+    }
+`
+
+export const {{ properCase name }}Queries = `
+    {{ properCase name }}(id: ID!): {{ properCase name }}
+    {{ properCase name }}s(
+        filter: inputFilter 
+    ): [ {{ properCase name }}! ]!
+`
+
+export const {{ properCase name }}Mutations = `
+    {{ properCase name }}Create(input: {{ properCase name }}Input!): {{ properCase name }}
+    {{ properCase name }}Update(input: {{ properCase name }}Input!): {{ properCase name }}
+    {{ properCase name }}Delete(id: ID!): Boolean
+`
