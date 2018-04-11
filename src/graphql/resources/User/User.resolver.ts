@@ -1,4 +1,5 @@
 import * as Parse from 'parse/node'
+import { ParseObjectSearch } from '../../helper'
 
 export const isAuthorized = async token => {
     const q = new Parse.Query(Parse.Session).include('user').equalTo('sessionToken', token)
@@ -14,21 +15,25 @@ export const UserResolver = {
         id: (root) => root.id,
         username: (root) => root.get('username'),
         email: (root) => root.get('email'),
-        name: (root) => root.get('name'),
+        name: (root) => root.get('name') || null,
         sessionToken: (root) => root.get('sessionToken'),
+        address: root => root.get('address') || null,
+        location: root => root.get('location') || null,
+        createdAt: (root) => root.get('createdAt').getTime(),
+        updatedAt: (root) => root.get('updatedAt').getTime(),
     },
     Query: {
-        async UserCurrent(root, {}, { sessionToken }) {
+        async UserCurrent(_, {}, { sessionToken }) {
             const session = await isAuthorized(sessionToken)
             return session
         },
-        async User(root, {}, { sessionToken }) {
-            const session = await isAuthorized(sessionToken)
-            return session
+        async User(_, { id }, { sessionToken }) {
+            return new Parse.Query('User')
+                .get(id)
         },
-        async Users(root, {}, { sessionToken }) {
-            const session = await isAuthorized(sessionToken)
-            return session
+        async Users(_, { filter}, { sessionToken }) {
+            return ParseObjectSearch('User', filter)
+                .find()
         },
     },
     Mutation: {

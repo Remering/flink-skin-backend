@@ -1,13 +1,17 @@
-export const userType = `
+export const UserType = `
     type User {
         id: ID!
-        username: String!
-        email: String!
         name: String!
+        email: String!
+        username: String!
         sessionToken: String
-        posts: [Post]
+        roleName: String!
+        address: Address
+        location: Geolocation
+        createdAt: Float!
+        updatedAt: Float!
     }
-    
+   
     input UserCreateInput {
         name: String!
         username: String!
@@ -31,13 +35,15 @@ export const userType = `
     }
 `
 
-export const userQueries = `
+export const UserQueries = `
     UserCurrent: User
     User(id: ID!): User
-    Users(first: Int, offset: Int): [ User! ]!
+    Users(
+        filter: inputFilter
+    ): [ User! ]!
 `;
 
-export const userMutations = `
+export const UserMutations = `
     UserCreate(input: UserCreateInput!): User
     UserLogin(input: UserLoginInput!): User
     UserUpdate(input: UserUpdateInput!): User
