@@ -1,11 +1,11 @@
 {
-  "name": "parse-server-graphql-example",
+  "name": "flink-skin-backend",
   "version": "1.5.0",
-  "description": "An example Parse API server using the parse-server module",
+  "description": "Backend of flink skin",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ParsePlatform/parse-server-example"
+    "url": "https://github.com/Remering/flink-skin-backend"
   },
   "license": "MIT",
   "dependencies": {
